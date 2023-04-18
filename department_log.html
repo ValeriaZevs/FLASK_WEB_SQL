@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<meta charset="UTF-8">
+
+<h2 align="center">Department log</h2>
+{% if current_user.is_authenticated %}
+<p align="justify">
+    <a href="/for_admin" class="btn btn-secondary">Back</a>
+{% endif %}
+{% for department in departments %}
+<h3>Action # {{ department.id }}</h3>
+<div class="table_container">
+    <table class="my_table">
+        <tr class="my_row">
+            <td class="title" width="400px" bgcolor="#dddddd">Title</td>
+            <td class="title" width="100px" bgcolor="#dddddd" align="center">Chief</td>
+            <td class="title" width="200px" bgcolor="#dddddd" align="center">Members</td>
+            <td class="title" width="200px" bgcolor="#dddddd" align="center">Email</td>
+            <td class="title" width="100px" bgcolor="#dddddd" align="center">Team_leader</td>
+        </tr>
+        <tr class="my_row">
+            <td class="ordinary" bgcolor="#eeeeff">{{ department.title.capitalize() }}</td>
+            <td class="ordinary" bgcolor="#eeeeff" align="center">{{ department.chief }}</td>
+            <td class="ordinary" bgcolor="#eeeeff">{{ ', '.join(department.members.split(', ') }}</td>
+            <td class="ordinary" bgcolor="#eeeeff" align="center">{{ department.email }}</td>
+            <td class="ordinary" bgcolor="#eeeeff" align="center">{{ department.team_leader }}</td>
+        </tr>
+
+    </table>
+</div>
+<br>
+{% if current_user.is_authenticated and (current_user.id == department.team_leader or current_user.id == 1)  %}
+<div>
+    <a href="/department_change/{{ department.id }}" class="btn btn-warning">Edit Department</a>
+    <a href="/department_delete/{{ department.id }}" class="btn btn-danger">Delete Department</a>
+</div>
+{% endif %}
+{% endfor %}
+
+{% endblock %}
